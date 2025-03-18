@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 
+const API_URL = import.meta.env.VITE_BACKEND_URL || "https://speech-to-text-transcription-backend-a3kn.vercel.app";
 function LiveRecorder({ setTranscription }) {
     const [recording, setRecording] = useState(false);
     let mediaRecorder, audioChunks = [];
@@ -12,9 +14,28 @@ function LiveRecorder({ setTranscription }) {
         setRecording(true);
     };
 
-    const stopRecording = () => {
-        mediaRecorder.stop();
+    // const stopRecording = () => {
+    //     mediaRecorder.stop();
+    //     setRecording(false);
+    // };
+        const stopRecording = async () => {
+        mediaRecorderRef.current.stop();
         setRecording(false);
+
+        mediaRecorderRef.current.onstop = async () => {
+            const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+            const formData = new FormData();
+            formData.append("audio", audioBlob);
+
+            try {
+                const response = await axios.post(`${API_URL}/transcribe`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                setTranscription(response.data.transcription);
+            } catch (error) {
+                console.error("Error sending recording:", error);
+            }
+        };
     };
 
     return (
