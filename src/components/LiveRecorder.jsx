@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_BACKEND_URL || "https://speech-to-text-transcription-backend-a3kn.vercel.app";
+const API_URL = import.meta.env.VITE_BACKEND_URL || "https://speech-to-text-transcription-backend-ldkgswfxj.vercel.app/";
 function LiveRecorder({ setTranscription }) {
     const [recording, setRecording] = useState(false);
     let mediaRecorder, audioChunks = [];
