@@ -28,6 +28,7 @@
 // export default FileUpload;
 import React, { useState } from "react";
 import axios from "axios";
+const API_URL = import.meta.env.VITE_BACKEND_URL || "https://speech-to-text-transcription-backend-a3kn.vercel.app";
 
 function FileUpload({ setTranscription }) {
     const [audio, setAudio] = useState(null);
@@ -45,7 +46,7 @@ function FileUpload({ setTranscription }) {
 
         try {
             // Send file to backend
-            const response = await axios.post("http://localhost:5000/transcribe", formData, {
+            const response = await axios.post(`${API_URL}/transcribe`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
